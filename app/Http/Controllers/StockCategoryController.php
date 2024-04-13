@@ -14,6 +14,11 @@ class StockCategoryController extends Controller
             return StockCategory::all();
         });
 
+        $key = Cache::get('categories');
+        // Log a message when retrieving an item from the cache
+        Log::info('Item retrieved from cache: ' . $key);
+
+
         // Return view with categories
         return view('stockCategory.index', ['categories' => $categories]);
     }
