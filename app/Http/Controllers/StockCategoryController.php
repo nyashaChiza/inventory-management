@@ -2,13 +2,23 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use App\Models\StockCategory;
+use Illuminate\Support\Facades\Log;
 
 class StockCategoryController extends Controller
 {
-    public function index(){
-        return view('stockCategory/index',['categories'=> StockCategory::all()]);
+    public function index()
+    {
+        $categories = Cache::remember('categories', 60, function () {
+            return StockCategory::all();
+        });
+
+        // Return view with categories
+        return view('stockCategory.index', ['categories' => $categories]);
     }
+
+
 
     public function create(Request $request){
 
