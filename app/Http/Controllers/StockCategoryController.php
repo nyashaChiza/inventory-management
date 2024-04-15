@@ -14,61 +14,51 @@ class StockCategoryController extends Controller
             return StockCategory::all();
         });
 
-        $key = Cache::get('categories');
-        // Log a message when retrieving an item from the cache
-        Log::info('Item retrieved from cache: ' . $key);
-
+        // Log a message when retrieving items from the cache
+        Log::info('Categories retrieved from cache');
 
         // Return view with categories
         return view('stockCategory.index', ['categories' => $categories]);
     }
 
-
-
-    public function create(Request $request){
-
+    public function store(Request $request)
+    {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
         ]);
 
-        $stockCategory = new StockCategory;
-        $stockCategory->name = $validatedData['name'];
-        $stockCategory->description = $validatedData['description'];
-        $stockCategory->save();
+        $stockCategory = StockCategory::create($validatedData);
 
         return redirect(route('listCategories'))->with('message', 'Category created successfully.');
-
-
     }
 
-    public function showCreateForm(){
+    public function create()
+    {
         return view('stockCategory.create');
     }
 
-    public function update(Request $request, $id){
+    public function update(Request $request, $id)
+    {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:255',
         ]);
 
         $stockCategory = StockCategory::findOrFail($id);
-        $stockCategory->name = $validatedData['name'];
-        $stockCategory->description = $validatedData['description'];
-        $stockCategory->save();
+        $stockCategory->update($validatedData);
 
         return redirect(route('listCategories'))->with('message', $stockCategory->name.' category updated');
     }
 
-    public function destroy(Request $request, $id){
-
+    public function destroy(Request $request, $id)
+    {
         $stockCategory = StockCategory::findOrFail($id);
         $name = $stockCategory->name;
         $stockCategory->delete();
 
-        return redirect(route('listCategories'))->with('message',$name.' category deleted successfully');
+        return redirect(route('listCategories'))->with('message', $name.' category deleted successfully');
     }
-
 
     public function showUpdateForm($id)
     {
@@ -76,6 +66,6 @@ class StockCategoryController extends Controller
         $stockCategory = StockCategory::findOrFail($id);
 
         // Return the view for updating the stock category
-        return view('stockCategory.update',['category'=>$stockCategory] );
+        return view('stockCategory.update', ['category' => $stockCategory]);
     }
 }

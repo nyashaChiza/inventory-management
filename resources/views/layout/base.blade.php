@@ -9,7 +9,7 @@
     <title>@yield('title')</title>
 </head>
 
-<body class='body card card-bordered rounded mx-auto col-md-8 py-4'>
+<body class='body card card-bordered rounded mx-auto col-md-8 py-4 my-4'>
     <header>
         @include('layout\header')
     </header>

@@ -4,7 +4,7 @@
 @section('New', 'Add New Category')
 
 @section('content')
-<form method="post" action="{{ route('stockCategoryCreate') }}">
+<form method="post" action="{{ route('stockCategoryStore') }}">
   {{ csrf_field() }}
     <div class="mb-3">
         <label for="name" class="form-label">Name</label>

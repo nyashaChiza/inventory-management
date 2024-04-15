@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Stock;
+use App\Models\StockCategory;
 
 class StockController extends Controller
 {
@@ -16,14 +17,15 @@ class StockController extends Controller
 
     // Show the form for creating a new stock
     public function create()
-    {
-        return view('stocks.create');
-    }
+{
+    $categories = StockCategory::all();
+    return view('stocks.create', compact('categories'));
+}
 
     // Store a newly created stock in storage
     public function store(Request $request)
     {
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required',
             'description' => 'nullable',
             'category_id' => 'nullable|exists:stock_category,id',
@@ -32,15 +34,26 @@ class StockController extends Controller
             'quantity' => 'required|numeric|min:0',
         ]);
 
-        Stock::create($request->all());
+        Stock::create($validatedData);
 
-        return redirect()->route('stocks.index')->with('success', 'Stock created successfully.');
+        return redirect()->route('stockIndex')->with('success', 'Stock created successfully.');
     }
 
     // Display the specified stock
     public function show(Stock $stock)
     {
         return view('stocks.show', compact('stock'));
+    }
+
+
+    public function showCreateForm()
+    {
+        return view('stocks.create');
+    }
+
+    public function showUpdateForm()
+    {
+        return view('stocks.update');
     }
 
     // Show the form for editing the specified stock
